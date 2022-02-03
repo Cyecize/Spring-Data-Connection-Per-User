@@ -8,6 +8,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/database-connect/database-connect.module').then(m => m.DatabaseConnectModule),
   },
   {
+    path: AppRoutingPath.DATABASE_SELECT.path,
+    loadChildren: () => import('./pages/database-select/database-select.module').then(m => m.DatabaseSelectModule),
+  },
+  {
+    path: AppRoutingPath.DATABASE_CREATE.path,
+    loadChildren: () => import('./pages/database-create/database-create.module').then(m => m.DatabaseCreateModule),
+  },
+  {
     path: AppRoutingPath.HOME.path,
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
     pathMatch: 'full'

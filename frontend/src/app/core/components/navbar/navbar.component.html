@@ -20,21 +20,19 @@
           <div class="dropdown-menu" aria-labelledby="connDropdown">
 <!--            {% set hasJdbcConn = utils.hasJdbcConnection(request) %}-->
 <!--            {% if user %}-->
-            <a class="dropdown-item" href="/r1">
-            Switch Database
-            </a>
+<!--            <a class="dropdown-item" [routerLink]="routes.DATABASE_SELECT.toString()">Switch Database</a>-->
 <!--            {% else %}-->
-<!--            <a class="dropdown-item" href="{{ path("/database/connect") }}">-->
+            <a class="dropdown-item" [routerLink]="routes.DATABASE_CONNECT.toString()">
 <!--            {% if hasJdbcConn %}-->
-<!--            Change Connection-->
+            Change Connection
 <!--            {% else %}-->
 <!--            Connect to a Database-->
 <!--            {% endif %}-->
-<!--            </a>-->
+            </a>
 <!--            {% if hasJdbcConn %}-->
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/r2">Select Database</a>
-            <a class="dropdown-item" [routerLink]="routes.DATABASE_CONNECT.toString()">New Database</a>
+            <a class="dropdown-item" [routerLink]="routes.DATABASE_SELECT.toString()">Select Database</a>
+            <a class="dropdown-item" [routerLink]="routes.DATABASE_CREATE.toString()">New Database</a>
 <!--            {% endif %}-->
 <!--            {% endif %}-->
           </div>
