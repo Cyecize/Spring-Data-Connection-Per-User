@@ -1,1 +1,36 @@
-<p>database-select works!</p>
+<div class="mr-auto mt-2 pt-3">
+  <h3>Select Database</h3>
+
+  <form method="post">
+    <div>
+      <label for="dbName">Database Name</label>
+      <select name="databaseName" id="dbName" required class="form-control selectize">
+        <!--        {% for dbName in dbNames %}-->
+        <option>DB 1</option>
+        <option>Secondary DB</option>
+        <option>Other DB</option>
+        <!--        {% endfor %}-->
+      </select>
+    </div>
+
+    <div class="form-group text-end">
+      <div class="mt-1">
+        <div class="m-1 d-inline">
+          <a [routerLink]="routes.DATABASE_CONNECT.toString()" class="btn btn-dark">
+            Change Connection
+          </a>
+        </div>
+        <div class="m-1  d-inline">
+          <a [routerLink]="routes.DATABASE_CREATE.toString()" class="btn btn-dark">
+            New Database
+          </a>
+        </div>
+        <div class="m-1  d-inline">
+          <button type="submit" class="btn btn-info">
+            Choose
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

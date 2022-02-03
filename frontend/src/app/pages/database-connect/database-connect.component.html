@@ -1,1 +1,50 @@
-<p>database-connect works!</p>
+<div class="mr-auto mt-2 pt-3">
+
+  <h3>Establish Database Connection</h3>
+  <form method="post" id="formDbConnection">
+    <div>
+      <label for="dbProvider">Database Provider</label>
+      <select name="databaseProvider" id="dbProvider" required class="form-control selectize">
+        <option value="" disabled selected>-- Choose --</option>
+        <option>My SQL</option>
+        <option>Microsoft SQL Server</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="hostAddress">Host</label>
+      <input value="" type="text" id="hostAddress" name="host" class="form-control" required
+             placeholder="db.server.com">
+    </div>
+
+    <div>
+      <label for="port">Port</label>
+      <input value="" type="number" id="port" step="1" name="port" placeholder="3306/1433"
+             class="form-control" required>
+    </div>
+
+    <div>
+      <label for="username">Username</label>
+      <input value="" type="text" id="username" name="username" placeholder="root"
+             class="form-control" required>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="******" class="form-control">
+    </div>
+
+    <div class="mt-1 text-end">
+      <div class="m-1 d-inline">
+        <a [routerLink]="routes.DATABASE_SELECT.toString()" class="btn btn-success">
+          Select Database
+        </a>
+      </div>
+      <div class="m-1 d-inline">
+        <button class="btn btn-info" id="btnConnect">
+          Connect
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

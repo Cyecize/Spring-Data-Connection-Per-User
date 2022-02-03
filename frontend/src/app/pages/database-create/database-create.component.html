@@ -1,1 +1,46 @@
-<p>database-create works!</p>
+<div class="mr-auto mt-2 pt-3">
+  <h3>New Database</h3>
+  <form method="post" id="formDbCreation">
+    <div>
+      <label for="databaseName">Database Name</label>
+      <input value="" type="text" id="databaseName" name="databaseName"
+             class="form-control"
+             required placeholder="db_example_name">
+    </div>
+
+    <h5 class="m-0 p-0">Admin Details</h5>
+    <div>
+      <label for="username">Username</label>
+      <input value="" type="text" id="username" name="adminUsername"
+             placeholder="John123"
+             class="form-control" required>
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="adminPassword" placeholder="******" class="form-control"
+             required>
+    </div>
+
+    <div>
+      <label for="passwordConfirm">Confirm Password</label>
+      <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="******"
+             class="form-control" required>
+    </div>
+
+    <div class="form-group text-end">
+      <div class="mt-1">
+        <div class="m-1 d-inline">
+          <a [routerLink]="routes.DATABASE_SELECT.toString()" class="btn btn-dark">
+            Back
+          </a>
+        </div>
+        <div class="m-1 d-inline">
+          <button class="btn btn-info" id="btnCreate">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
