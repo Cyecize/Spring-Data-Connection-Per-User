@@ -2,5 +2,9 @@
 
   <h3>Establish Database Connection</h3>
 
-  <app-database-connect-form></app-database-connect-form>
+  <app-database-connect-form
+    (formSubmit)="onFormSubmit($event)"
+    [dbProviders]="providers"
+    [hasDbConnection]="hasDbConnection"
+    [errors]="fieldErrors"></app-database-connect-form>
 </div>

@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {FieldError} from "../../../../shared/field-error/field-error";
 import {DatabaseConnectModel} from "../../../../core/database/database-connect.model";
 import {Lengths} from "../../../../shared/constants/lengths";
+import {DatabaseProviderModel} from "../../../../core/database/database-provider.model";
 
 @Component({
   selector: 'app-database-connect-form',
@@ -23,6 +24,9 @@ export class DatabaseConnectFormComponent implements OnInit {
   @Input()
   errors!: FieldError[];
 
+  @Input()
+  dbProviders!: DatabaseProviderModel[];
+
   @Output()
   formSubmit: EventEmitter<DatabaseConnectModel> = new EventEmitter<DatabaseConnectModel>();
 
@@ -40,6 +44,5 @@ export class DatabaseConnectFormComponent implements OnInit {
 
   onFormSubmit() {
     this.formSubmit?.emit(this.form.value);
-    console.log(this.form.value);
   }
 }

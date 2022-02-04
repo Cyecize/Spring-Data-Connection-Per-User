@@ -3,8 +3,7 @@
     <label for="dbProvider">Database Provider</label>
     <select formControlName="databaseProvider" id="dbProvider" class="form-control selectize">
       <option value="" disabled selected>-- Choose --</option>
-      <option>My SQL</option>
-      <option>Microsoft SQL Server</option>
+      <option *ngFor="let opt of dbProviders" [value]="opt.name">{{opt.displayName}}</option>
     </select>
   </div>
 
