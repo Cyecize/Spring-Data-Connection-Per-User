@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {AppRoutingPath} from "../../app-routing.path";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-database-connect',
@@ -8,9 +7,8 @@ import {AppRoutingPath} from "../../app-routing.path";
 })
 export class DatabaseConnectComponent implements OnInit {
 
-  constructor() { }
-
-  routes = AppRoutingPath;
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

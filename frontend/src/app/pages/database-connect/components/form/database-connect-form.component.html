@@ -1,0 +1,45 @@
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+  <div>
+    <label for="dbProvider">Database Provider</label>
+    <select formControlName="databaseProvider" id="dbProvider" class="form-control selectize">
+      <option value="" disabled selected>-- Choose --</option>
+      <option>My SQL</option>
+      <option>Microsoft SQL Server</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="hostAddress">Host</label>
+    <input value="" type="text" id="hostAddress" formControlName="host" placeholder="db.server.com"
+           class="form-control">
+  </div>
+
+  <div>
+    <label for="port">Port</label>
+    <input value="" type="number" id="port" step="1" formControlName="port" placeholder="3306/1433"
+           class="form-control">
+  </div>
+
+  <div>
+    <label for="username">Username</label>
+    <input value="" type="text" id="username" formControlName="username" placeholder="root" class="form-control">
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" formControlName="password" placeholder="******" class="form-control">
+  </div>
+
+  <div class="mt-1 text-end">
+    <div *ngIf="hasDbConnection" class="m-1 d-inline">
+      <a [routerLink]="routes.DATABASE_SELECT.toString()" class="btn btn-success">
+        Select Database
+      </a>
+    </div>
+    <div class="m-1 d-inline">
+      <button class="btn btn-info" type="submit" [disabled]="!form.valid">
+        Connect
+      </button>
+    </div>
+  </div>
+</form>
