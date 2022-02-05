@@ -4,6 +4,8 @@ import {DatabaseProviderModel} from "../../core/database/database-provider.model
 import {DatabaseConnectModel} from "../../core/database/database-connect.model";
 import {FieldError} from "../../shared/field-error/field-error";
 import {DatabaseConnectService} from "../../core/database/database-connect.service";
+import {RouteNavigator} from "../../core/routing/route-navigator.service";
+import {AppRoutingPath} from "../../app-routing.path";
 
 @Component({
   selector: 'app-database-connect',
@@ -19,7 +21,8 @@ export class DatabaseConnectComponent implements OnInit {
   hasDbConnection!: boolean;
 
   constructor(private providerService: DatabaseProviderService,
-              private databaseConnectService: DatabaseConnectService) {
+              private databaseConnectService: DatabaseConnectService,
+              private nav: RouteNavigator) {
   }
 
   ngOnInit(): void {
@@ -30,5 +33,8 @@ export class DatabaseConnectComponent implements OnInit {
   async onFormSubmit(databaseConnectModel: DatabaseConnectModel) {
     this.fieldErrors = [];
     this.fieldErrors = await this.databaseConnectService.connectToDatabase(databaseConnectModel);
+    if (this.fieldErrors.length === 0) {
+      this.nav.navigate(AppRoutingPath.DATABASE_SELECT);
+    }
   }
 }
