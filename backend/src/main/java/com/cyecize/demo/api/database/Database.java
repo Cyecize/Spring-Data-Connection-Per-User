@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.sql.DataSource;
 
 @Data
-public class Database {
+public class Database implements AutoCloseable {
 
     private DatabaseProvider databaseProvider;
 
@@ -23,4 +23,15 @@ public class Database {
      * Data source used by hibernate.
      */
     private DataSource ormDataSource;
+
+    @Override
+    public void close() throws Exception {
+        if (this.jdbcDataSource != null) {
+            this.jdbcDataSource.getConnection().close();
+        }
+        
+        if (this.ormDataSource != null) {
+            this.ormDataSource.getConnection().close();
+        }
+    }
 }

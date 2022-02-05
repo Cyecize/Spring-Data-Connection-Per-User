@@ -31,7 +31,19 @@ public class SessionStorageServiceImpl implements SessionStorageService {
 
         this.sessions.entrySet().stream()
                 .filter(entry -> this.isSessionExpired(entry.getValue(), now))
-                .forEach(entry -> this.sessions.remove(entry.getKey()));
+                .forEach(entry -> {
+                    entry.getValue().getSessionStorage().values().forEach(obj -> {
+                        if (obj instanceof AutoCloseable) {
+                            try {
+                                ((AutoCloseable) obj).close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    this.sessions.remove(entry.getKey());
+                });
     }
 
     @Override
@@ -68,7 +80,7 @@ public class SessionStorageServiceImpl implements SessionStorageService {
         }
 
         if (this.isSessionExpired(session, LocalDateTime.now())) {
-            this.sessions.remove(id);
+            session.invalidate();
             return Optional.empty();
         }
 
