@@ -7,7 +7,8 @@ import {SharedModule} from "./shared/shared.module";
 import {NavbarModule} from "./core/components/navbar/navbar.module";
 import {CookieService} from "ngx-cookie-service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {HttpRetryInterceptor} from "./shared/http/http-retry.interceptor";
+import {HttpRetryInterceptor} from "./shared/http/interceptors/http-retry.interceptor";
+import {HttpRedirectInterceptor} from "./shared/http/interceptors/http-redirect.interceptor";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {HttpRetryInterceptor} from "./shared/http/http-retry.interceptor";
   ],
   providers: [
     CookieService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpRetryInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRetryInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRedirectInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
