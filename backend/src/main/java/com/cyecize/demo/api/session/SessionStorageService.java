@@ -6,5 +6,7 @@ public interface SessionStorageService {
 
     Session generateSession();
 
-    Optional<Session> getSession(String id);
+    Optional<Session> getCurrentSession();
+
+    void setCurrentSession(String id);
 }

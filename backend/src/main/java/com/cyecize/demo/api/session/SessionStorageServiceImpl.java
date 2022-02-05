@@ -19,6 +19,8 @@ public class SessionStorageServiceImpl implements SessionStorageService {
 
     private final int sessionMaxLifeTimeMinutes;
 
+    private final ThreadLocal<Session> currentSession = new ThreadLocal<>();
+
     public SessionStorageServiceImpl(@Value("${session.max.lifetime.minutes}") int sessionMaxLifeTimeMinutes) {
         this.sessionMaxLifeTimeMinutes = sessionMaxLifeTimeMinutes;
     }
@@ -38,11 +40,23 @@ public class SessionStorageServiceImpl implements SessionStorageService {
         session.setSessionId(UUID.randomUUID().toString());
         session.updateLastAccessTime();
 
+        this.sessions.put(session.getSessionId(), session);
+
         return session;
     }
 
     @Override
-    public Optional<Session> getSession(String id) {
+    public Optional<Session> getCurrentSession() {
+        return Optional.ofNullable(this.currentSession.get());
+    }
+
+    @Override
+    public void setCurrentSession(String id) {
+        this.currentSession.set(null);
+        this.getSession(id).ifPresent(this.currentSession::set);
+    }
+
+    private Optional<Session> getSession(String id) {
         if (id == null) {
             return Optional.empty();
         }
