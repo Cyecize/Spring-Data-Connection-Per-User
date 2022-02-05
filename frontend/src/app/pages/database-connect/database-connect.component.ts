@@ -3,6 +3,7 @@ import {DatabaseProviderService} from "../../core/database/database-provider.ser
 import {DatabaseProviderModel} from "../../core/database/database-provider.model";
 import {DatabaseConnectModel} from "../../core/database/database-connect.model";
 import {FieldError} from "../../shared/field-error/field-error";
+import {DatabaseConnectService} from "../../core/database/database-connect.service";
 
 @Component({
   selector: 'app-database-connect',
@@ -15,17 +16,19 @@ export class DatabaseConnectComponent implements OnInit {
 
   fieldErrors: FieldError[] = [];
 
-  hasDbConnection: boolean = true;
+  hasDbConnection!: boolean;
 
-  constructor(private providerService: DatabaseProviderService) {
-
+  constructor(private providerService: DatabaseProviderService,
+              private databaseConnectService: DatabaseConnectService) {
   }
 
   ngOnInit(): void {
     this.providerService.getProviders().subscribe(value => this.providers = value);
+    this.databaseConnectService.hasEstablishedConnection().subscribe(value => this.hasDbConnection = value);
   }
 
-  onFormSubmit(databaseConnectModel: DatabaseConnectModel) {
-    console.log(databaseConnectModel);
+  async onFormSubmit(databaseConnectModel: DatabaseConnectModel) {
+    this.fieldErrors = [];
+    this.fieldErrors = await this.databaseConnectService.connectToDatabase(databaseConnectModel);
   }
 }

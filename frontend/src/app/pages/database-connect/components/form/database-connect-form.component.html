@@ -1,32 +1,45 @@
 <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+  <h3 *ngFor="let error of errors | filterFieldError:''" class="alert alert-danger">{{error.message}}</h3>
   <div>
     <label for="dbProvider">Database Provider</label>
-    <select formControlName="databaseProvider" id="dbProvider" class="form-control selectize">
+    <select formControlName="databaseProvider"
+            id="dbProvider"
+            class="form-control selectize"
+            [(ngModel)]="selectedProvider">
       <option value="" disabled selected>-- Choose --</option>
       <option *ngFor="let opt of dbProviders" [value]="opt.name">{{opt.displayName}}</option>
     </select>
+    <app-field-error [errors]="errors" fieldName="databaseProvider"></app-field-error>
   </div>
 
   <div>
     <label for="hostAddress">Host</label>
-    <input value="" type="text" id="hostAddress" formControlName="host" placeholder="db.server.com"
-           class="form-control">
+    <input type="text" id="hostAddress" formControlName="host" placeholder="db.server.com" class="form-control">
+    <app-field-error [errors]="errors" fieldName="host"></app-field-error>
   </div>
 
   <div>
     <label for="port">Port</label>
-    <input value="" type="number" id="port" step="1" formControlName="port" placeholder="3306/1433"
-           class="form-control">
+    <input type="number" id="port" step="1" formControlName="port" placeholder="3306/1433"
+           class="form-control" [(ngModel)]="port">
+    <app-field-error [errors]="errors" fieldName="port"></app-field-error>
   </div>
 
   <div>
     <label for="username">Username</label>
-    <input value="" type="text" id="username" formControlName="username" placeholder="root" class="form-control">
+    <input type="text" id="username" formControlName="username" placeholder="root" class="form-control">
+    <app-field-error [errors]="errors" fieldName="username"></app-field-error>
   </div>
 
   <div>
     <label for="password">Password</label>
     <input type="password" id="password" formControlName="password" placeholder="******" class="form-control">
+  </div>
+
+  <div class="mt-2">
+    <label for="useSSL">Use SSL</label>
+    <input type="checkbox" id="useSSL" formControlName="useSSL" class="form-check-input">
+    <app-field-error [errors]="errors" fieldName="useSSL"></app-field-error>
   </div>
 
   <div class="mt-1 text-end">

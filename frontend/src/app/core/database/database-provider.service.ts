@@ -14,7 +14,7 @@ export class DatabaseProviderService {
     this.repository.fetch().subscribe(value => {
       this.providers = value;
       this.providersEvent.emit(value);
-    })
+    });
   }
 
   public getProviders(): Observable<DatabaseProviderModel[]> {

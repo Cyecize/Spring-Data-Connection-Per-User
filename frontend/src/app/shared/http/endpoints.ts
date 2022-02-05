@@ -1,6 +1,10 @@
 export class Endpoints {
+  //@formatter:off
 
-  public static readonly DATABASE_PROVIDERS = '/database/providers';
+  // Database
+  public static readonly DATABASE_PROVIDERS                   = '/database/providers';
+  public static readonly DATABASE_HAS_ESTABLISHED_CONNECTION  = '/database/has_established_connection';
+  public static readonly DATABASE_CONNECT                     = '/database/connect';
 
   // Session
   public static readonly SESSION                              = "/session";

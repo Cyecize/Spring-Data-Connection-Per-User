@@ -6,4 +6,5 @@ export interface DatabaseConnectModel {
   port: number;
   username: string;
   password?: string;
+  useSSL: boolean;
 }
