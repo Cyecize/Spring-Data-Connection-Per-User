@@ -11,6 +11,6 @@ export class FilterFieldErrorPipe implements PipeTransform {
       errors = [];
     }
 
-    return errors.filter(e => e.propertyPath === fieldName);
+    return errors.filter(e => e.field === fieldName);
   }
 }

@@ -8,7 +8,8 @@ import {CommonModule} from '@angular/common';
     CommonModule
   ],
   exports: [
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    FilterFieldErrorPipe
   ],
   declarations: [ErrorMessageComponent, FilterFieldErrorPipe]
 })
