@@ -4,4 +4,5 @@ public interface DatabaseService {
 
     boolean hasEstablishedConnection();
 
+    void connectToDatabase(DatabaseConnectDto databaseConnectDto);
 }

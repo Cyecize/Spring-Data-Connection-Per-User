@@ -10,7 +10,7 @@ public class Database implements AutoCloseable {
 
     private DatabaseProvider databaseProvider;
 
-    private HikariConfig dataSourceConfig;
+    private HikariConfig dataSourceConfig = new HikariConfig();
 
     /**
      * Data source which may not contain info about any specific schema.
@@ -26,12 +26,18 @@ public class Database implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+        this.databaseProvider = null;
+        this.dataSourceConfig = new HikariConfig();
+        this.selectedDatabase = null;
+
         if (this.jdbcDataSource != null) {
             this.jdbcDataSource.getConnection().close();
+            this.jdbcDataSource = null;
         }
         
         if (this.ormDataSource != null) {
             this.ormDataSource.getConnection().close();
+            this.ormDataSource = null;
         }
     }
 }
