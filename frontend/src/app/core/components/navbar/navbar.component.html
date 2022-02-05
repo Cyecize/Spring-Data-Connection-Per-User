@@ -18,23 +18,13 @@
 <!--            {% endif %}-->
           </a>
           <div class="dropdown-menu" aria-labelledby="connDropdown">
-<!--            {% set hasJdbcConn = utils.hasJdbcConnection(request) %}-->
-<!--            {% if user %}-->
-<!--            <a class="dropdown-item" [routerLink]="routes.DATABASE_SELECT.toString()">Switch Database</a>-->
-<!--            {% else %}-->
             <a class="dropdown-item" [routerLink]="routes.DATABASE_CONNECT.toString()">
-<!--            {% if hasJdbcConn %}-->
-            Change Connection
-<!--            {% else %}-->
-<!--            Connect to a Database-->
-<!--            {% endif %}-->
+              <span *ngIf="hasDbConnection">Change Connection</span>
+              <span *ngIf="!hasDbConnection">Connect to a Database</span>
             </a>
-<!--            {% if hasJdbcConn %}-->
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" [routerLink]="routes.DATABASE_SELECT.toString()">Select Database</a>
-            <a class="dropdown-item" [routerLink]="routes.DATABASE_CREATE.toString()">New Database</a>
-<!--            {% endif %}-->
-<!--            {% endif %}-->
+            <div *ngIf="hasDbConnection" class="dropdown-divider"></div>
+            <a *ngIf="hasDbConnection" class="dropdown-item" [routerLink]="routes.DATABASE_SELECT.toString()">Select Database</a>
+            <a *ngIf="hasDbConnection" class="dropdown-item" [routerLink]="routes.DATABASE_CREATE.toString()">New Database</a>
           </div>
         </li>
 

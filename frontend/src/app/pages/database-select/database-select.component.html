@@ -5,11 +5,7 @@
     <div>
       <label for="dbName">Database Name</label>
       <select name="databaseName" id="dbName" required class="form-control selectize">
-        <!--        {% for dbName in dbNames %}-->
-        <option>DB 1</option>
-        <option>Secondary DB</option>
-        <option>Other DB</option>
-        <!--        {% endfor %}-->
+        <option *ngFor="let db of databases">{{db}}</option>
       </select>
     </div>
 

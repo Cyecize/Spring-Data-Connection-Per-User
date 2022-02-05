@@ -50,4 +50,8 @@ export class DatabaseConnectService {
       this.refreshConnectionStatus();
     }
   }
+
+  public getAllDatabases(): Observable<string[]> {
+    return this.repository.fetchDatabases();
+  }
 }

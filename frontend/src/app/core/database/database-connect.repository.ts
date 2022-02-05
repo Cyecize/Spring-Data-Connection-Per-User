@@ -19,4 +19,7 @@ export class DatabaseConnectRepository {
     return this.http.post(Endpoints.DATABASE_CONNECT, model);
   }
 
+  public fetchDatabases(): Observable<string[]> {
+    return this.http.get(Endpoints.DATABASES);
+  }
 }

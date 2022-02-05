@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AppRoutingPath} from "../../app-routing.path";
+import {DatabaseConnectService} from "../../core/database/database-connect.service";
 
 @Component({
   selector: 'app-database-select',
@@ -8,11 +9,19 @@ import {AppRoutingPath} from "../../app-routing.path";
 })
 export class DatabaseSelectComponent implements OnInit {
 
-  constructor() { }
+  constructor(private databaseService: DatabaseConnectService) {
+
+  }
 
   routes = AppRoutingPath;
 
+  databases: string[] = [];
+
   ngOnInit(): void {
+    this.loadDatabases();
   }
 
+  private loadDatabases(): void {
+    this.databaseService.getAllDatabases().subscribe(value => this.databases = value);
+  }
 }

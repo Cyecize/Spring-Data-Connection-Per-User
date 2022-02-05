@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AppRoutingPath} from "../../../app-routing.path";
+import {DatabaseConnectService} from "../../database/database-connect.service";
 
 @Component({
   selector: 'app-navbar',
@@ -8,11 +9,14 @@ import {AppRoutingPath} from "../../../app-routing.path";
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private databaseService: DatabaseConnectService) { }
 
   routes = AppRoutingPath;
 
+  hasDbConnection!: boolean;
+
   ngOnInit(): void {
+    this.databaseService.hasEstablishedConnection().subscribe(value => this.hasDbConnection = value);
   }
 
 }
