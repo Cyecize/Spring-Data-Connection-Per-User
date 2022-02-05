@@ -47,4 +47,8 @@ public class DatabaseController {
         this.databaseService.connectToDatabase(databaseConnectDto);
     }
 
+    @GetMapping(Endpoints.DATABASES)
+    public List<String> listDatabases() {
+        return this.databaseService.findAllDatabases();
+    }
 }

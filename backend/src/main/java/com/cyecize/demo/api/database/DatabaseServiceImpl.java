@@ -3,6 +3,7 @@ package com.cyecize.demo.api.database;
 import com.cyecize.demo.api.session.Session;
 import com.cyecize.demo.api.session.SessionStorageService;
 import com.cyecize.demo.error.ApiException;
+import com.cyecize.demo.error.NoDatabaseConnectionException;
 import com.cyecize.demo.error.NoSessionException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -10,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,7 +29,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public boolean hasEstablishedConnection() {
         final Database database = this.getDatabase();
+        return this.hasEstablishedConnection(database);
+    }
 
+    private boolean hasEstablishedConnection(Database database) {
         return database.getJdbcDataSource() != null || database.getOrmDataSource() != null;
     }
 
@@ -38,6 +46,26 @@ public class DatabaseServiceImpl implements DatabaseService {
             this.setJdbcConnection(database, databaseConnectDto);
         } catch (Exception ex) {
             throw new ApiException("Error while connecting to database.");
+        }
+    }
+
+    @Override
+    public List<String> findAllDatabases() {
+        final Database database = this.getDatabase();
+        if (!this.hasEstablishedConnection(database)) {
+            throw new NoDatabaseConnectionException();
+        }
+
+        final DataSource dataSource = Objects.requireNonNullElse(
+                database.getJdbcDataSource(),
+                database.getOrmDataSource()
+        );
+
+        try {
+            return database.getDatabaseProvider().getConnectionUtil().findAllDatabases(dataSource);
+        } catch (SQLException e) {
+            log.error("Error while obtaining list of databases.", e);
+            throw new ApiException("Error while obtaining list of databases.");
         }
     }
 
