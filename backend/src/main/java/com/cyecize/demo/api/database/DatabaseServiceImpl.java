@@ -9,6 +9,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.flywaydb.core.Flyway;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -26,6 +28,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     private final SessionStorageService sessionStorageService;
 
+    private final ModelMapper modelMapper;
+
     @Override
     public boolean hasEstablishedConnection() {
         final Database database = this.getDatabase();
@@ -37,39 +41,24 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public void connectToDatabase(DatabaseConnectDto databaseConnectDto) {
+    public void connectToSQLServer(DatabaseConnectDto databaseConnectDto) {
         final Database database = this.getDatabase();
         this.clearOldConnection(database);
 
         database.setDatabaseProvider(databaseConnectDto.getDatabaseProvider());
+        database.setServerConnectionProperties(this.modelMapper.map(databaseConnectDto, ServerConnectionProperties.class));
+
+        this.setHikariConfig(database, databaseConnectDto);
+
         try {
-            this.setJdbcConnection(database, databaseConnectDto);
+            final HikariDataSource jdbcDataSource = new HikariDataSource(database.getDataSourceConfig());
+            database.setJdbcDataSource(jdbcDataSource);
         } catch (Exception ex) {
             throw new ApiException("Error while connecting to database.");
         }
     }
 
-    @Override
-    public List<String> findAllDatabases() {
-        final Database database = this.getDatabase();
-        if (!this.hasEstablishedConnection(database)) {
-            throw new NoDatabaseConnectionException();
-        }
-
-        final DataSource dataSource = Objects.requireNonNullElse(
-                database.getJdbcDataSource(),
-                database.getOrmDataSource()
-        );
-
-        try {
-            return database.getDatabaseProvider().getConnectionUtil().findAllDatabases(dataSource);
-        } catch (SQLException e) {
-            log.error("Error while obtaining list of databases.", e);
-            throw new ApiException("Error while obtaining list of databases.");
-        }
-    }
-
-    private void setJdbcConnection(Database database, DatabaseConnectDto databaseConnectDto) {
+    private void setHikariConfig(Database database, DatabaseConnectDto databaseConnectDto) {
         final HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(database.getDatabaseProvider().getConnectionUtil().getConnectionString(
@@ -84,8 +73,89 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         config.setAutoCommit(false);
 
-        final HikariDataSource jdbcDataSource = new HikariDataSource(config);
-        database.setJdbcDataSource(jdbcDataSource);
+        database.setDataSourceConfig(config);
+    }
+
+    @Override
+    public List<String> findAllDatabases() {
+        final Database database = this.getDatabase();
+        if (!this.hasEstablishedConnection(database)) {
+            throw new NoDatabaseConnectionException();
+        }
+
+        return this.findAllDatabases(database);
+    }
+
+    private List<String> findAllDatabases(Database database) {
+        final DataSource dataSource = this.getDataSource(database);
+
+        try {
+            return database.getDatabaseProvider().getConnectionUtil().findAllDatabases(dataSource);
+        } catch (SQLException e) {
+            log.error("Error while obtaining list of databases.", e);
+            throw new ApiException("Error while obtaining list of databases.");
+        }
+    }
+
+    @Override
+    public void selectDatabase(String selectedDatabase) {
+        final Database database = this.getDatabase();
+        if (!this.hasEstablishedConnection(database)) {
+            throw new NoDatabaseConnectionException();
+        }
+
+        final List<String> allDatabases = this.findAllDatabases(database);
+
+        if (!this.databaseNameExists(allDatabases, selectedDatabase)) {
+            throw new ApiException("Database name does not exist!");
+        }
+
+        final HikariConfig dataSourceConfig = database.getDataSourceConfig();
+        final String oldUrl = dataSourceConfig.getJdbcUrl();
+        final ServerConnectionProperties serverProperties = database.getServerConnectionProperties();
+
+        dataSourceConfig.setJdbcUrl(database.getDatabaseProvider().getConnectionUtil().getConnectionString(
+                serverProperties.getHost(),
+                serverProperties.getPort(),
+                serverProperties.getUseSSL(),
+                selectedDatabase
+        ));
+
+        final HikariDataSource ormDataSource = new HikariDataSource(dataSourceConfig);
+
+        if (!database.getDatabaseProvider().getConnectionUtil().hasValidFlywayTable(ormDataSource)) {
+            dataSourceConfig.setJdbcUrl(oldUrl);
+            throw new ApiException("Database is incompatible!");
+        }
+
+        try {
+            this.executeFlywayMigrations(database.getDatabaseProvider(), ormDataSource);
+        } catch (Exception ex) {
+            dataSourceConfig.setJdbcUrl(oldUrl);
+            throw new ApiException("Database is corrupted!");
+        }
+
+        database.closeJdbcConnection();
+        database.setOrmDataSource(ormDataSource);
+        database.setSelectedDatabase(selectedDatabase);
+    }
+
+    @Override
+    public String getSelectedDatabase() {
+        final Database database = this.getDatabase();
+        return database.getSelectedDatabase();
+    }
+
+    private void executeFlywayMigrations(DatabaseProvider provider, DataSource dataSource) {
+        Flyway.configure()
+                .dataSource(dataSource)
+                .locations(String.format("migrations/%s", provider.getMigrationsFolderName()))
+                .load()
+                .migrate();
+    }
+
+    private boolean databaseNameExists(List<String> allDatabases, String selectedDatabase) {
+        return allDatabases.stream().anyMatch(dbName -> dbName.equalsIgnoreCase(selectedDatabase));
     }
 
     private void clearOldConnection(Database database) {
@@ -95,6 +165,10 @@ public class DatabaseServiceImpl implements DatabaseService {
             log.error("Error while closing old DB connection!", e);
             throw new ApiException("Error while closing old DB connection!");
         }
+    }
+
+    private DataSource getDataSource(Database database) {
+        return Objects.requireNonNullElse(database.getJdbcDataSource(), database.getOrmDataSource());
     }
 
     private Database getDatabase() {

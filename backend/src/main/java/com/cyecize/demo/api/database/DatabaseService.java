@@ -6,7 +6,11 @@ public interface DatabaseService {
 
     boolean hasEstablishedConnection();
 
-    void connectToDatabase(DatabaseConnectDto databaseConnectDto);
+    void connectToSQLServer(DatabaseConnectDto databaseConnectDto);
 
     List<String> findAllDatabases();
+
+    void selectDatabase(String selectedDatabase);
+
+    String getSelectedDatabase();
 }

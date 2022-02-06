@@ -14,14 +14,16 @@ public enum DatabaseProvider {
             "My SQL",
             3306,
             "com.mysql.cj.jdbc.Driver",
-            new MySqlConnectionUtil()
+            new MySqlConnectionUtil(),
+            "mysql"
     ),
 
     MS_SQL_SERVER(
             "Microsoft SQL Server",
             1433,
             "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-            new MsSqlServerConnectionUtil()
+            new MsSqlServerConnectionUtil(),
+            "mssqlserver"
     );
 
     private final String displayName;
@@ -31,6 +33,8 @@ public enum DatabaseProvider {
     private final String sqlDriver;
 
     private final ConnectionUtil connectionUtil;
+
+    private final String migrationsFolderName;
 
     private final String name = name();
 }

@@ -5,6 +5,8 @@ import com.cyecize.demo.api.database.DatabaseProvider;
 import com.cyecize.demo.api.database.DatabaseProviderDto;
 import com.cyecize.demo.api.database.DatabaseService;
 import com.cyecize.demo.constants.Endpoints;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,11 +47,34 @@ public class DatabaseController {
     @PostMapping(Endpoints.DATABASE_CONNECT)
     @ResponseStatus(HttpStatus.OK)
     public void connectToDatabase(@Valid @RequestBody DatabaseConnectDto databaseConnectDto) {
-        this.databaseService.connectToDatabase(databaseConnectDto);
+        this.databaseService.connectToSQLServer(databaseConnectDto);
+    }
+
+    @PostMapping(Endpoints.DATABASE_SELECT)
+    @ResponseStatus(HttpStatus.OK)
+    public void selectDatabase(@Valid @RequestBody SelectDatabaseDto selectDatabaseDto) {
+        this.databaseService.selectDatabase(selectDatabaseDto.getSelectedDatabase());
+    }
+
+    @GetMapping(Endpoints.DATABASE_SELECTED)
+    public CurrentDatabaseDto getSelectedDatabase() {
+        return new CurrentDatabaseDto(this.databaseService.getSelectedDatabase());
     }
 
     @GetMapping(Endpoints.DATABASES)
     public List<String> listDatabases() {
         return this.databaseService.findAllDatabases();
+    }
+
+    @Data
+    static class SelectDatabaseDto {
+        @NotEmpty
+        private String selectedDatabase;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class CurrentDatabaseDto {
+        private String database;
     }
 }

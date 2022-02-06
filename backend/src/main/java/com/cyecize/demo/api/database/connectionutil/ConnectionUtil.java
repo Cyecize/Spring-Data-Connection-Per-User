@@ -8,5 +8,9 @@ public interface ConnectionUtil {
 
     String getConnectionString(String host, int port, boolean useSSL);
 
+    String getConnectionString(String host, int port, boolean useSSL, String database);
+
     List<String> findAllDatabases(DataSource dataSource) throws SQLException;
+
+    boolean hasValidFlywayTable(DataSource dataSource);
 }

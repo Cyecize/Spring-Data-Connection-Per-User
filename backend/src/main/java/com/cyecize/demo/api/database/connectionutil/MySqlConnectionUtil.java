@@ -1,6 +1,9 @@
 package com.cyecize.demo.api.database.connectionutil;
 
+import com.cyecize.demo.constants.General;
+
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,14 +13,26 @@ import java.util.List;
 public class MySqlConnectionUtil implements ConnectionUtil {
     @Override
     public String getConnectionString(String host, int port, boolean useSSL) {
-        return String.format("jdbc:mysql://%s:%d?useSSL=%s", host, port, useSSL);
+        return this.getConnectionString(host, port, useSSL, null);
+    }
+
+    @Override
+    public String getConnectionString(String host, int port, boolean useSSL, String database) {
+        return String.format(
+                "jdbc:mysql://%s:%d%s?useSSL=%s",
+                host,
+                port,
+                database != null ? "/" + database : "",
+                useSSL
+        );
     }
 
     @Override
     public List<String> findAllDatabases(DataSource dataSource) throws SQLException {
         List<String> databaseNames = new ArrayList<>();
 
-        try (Statement selectDbStatement = dataSource.getConnection().createStatement()) {
+        try (Connection connection = dataSource.getConnection();
+             Statement selectDbStatement = connection.createStatement()) {
             final String databaseNameAlias = "Database";
 
             String queryForGettingDbNames = String.format(
@@ -36,5 +51,23 @@ public class MySqlConnectionUtil implements ConnectionUtil {
 
             return databaseNames;
         }
+    }
+
+    @Override
+    public boolean hasValidFlywayTable(DataSource dataSource) {
+        final String fileNameAlias = "Filename";
+        final String query = String.format("SELECT script as %s FROM flyway_schema_history LIMIT 1", fileNameAlias);
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            resultSet.next();
+            String fileName = resultSet.getString(fileNameAlias);
+            return General.INITIAL_FLYWAY_FILE_NAME.equals(fileName);
+
+        } catch (SQLException ignored) {
+        }
+
+        return false;
     }
 }

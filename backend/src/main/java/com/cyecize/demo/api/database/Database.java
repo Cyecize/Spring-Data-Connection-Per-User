@@ -1,43 +1,55 @@
 package com.cyecize.demo.api.database;
 
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
-
-import javax.sql.DataSource;
 
 @Data
 public class Database implements AutoCloseable {
 
     private DatabaseProvider databaseProvider;
 
+    private ServerConnectionProperties serverConnectionProperties;
+
     private HikariConfig dataSourceConfig = new HikariConfig();
 
     /**
      * Data source which may not contain info about any specific schema.
      */
-    private DataSource jdbcDataSource;
+    private HikariDataSource jdbcDataSource;
 
     private String selectedDatabase;
 
     /**
      * Data source used by hibernate.
      */
-    private DataSource ormDataSource;
+    private HikariDataSource ormDataSource;
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         this.databaseProvider = null;
         this.dataSourceConfig = new HikariConfig();
         this.selectedDatabase = null;
+        this.serverConnectionProperties = null;
 
         if (this.jdbcDataSource != null) {
-            this.jdbcDataSource.getConnection().close();
+            this.jdbcDataSource.close();
             this.jdbcDataSource = null;
         }
-        
+
         if (this.ormDataSource != null) {
-            this.ormDataSource.getConnection().close();
+            this.ormDataSource.close();
             this.ormDataSource = null;
+        }
+    }
+
+    public void closeJdbcConnection() {
+        try {
+            if (this.jdbcDataSource != null) {
+                this.jdbcDataSource.close();
+            }
+        } finally {
+            this.jdbcDataSource = null;
         }
     }
 }
