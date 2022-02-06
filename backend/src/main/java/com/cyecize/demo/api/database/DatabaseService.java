@@ -1,5 +1,6 @@
 package com.cyecize.demo.api.database;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 public interface DatabaseService {
@@ -15,4 +16,6 @@ public interface DatabaseService {
     void createDatabase(String databaseName);
 
     String getSelectedDatabase();
+
+    DataSource getCurrentOrmDataSource();
 }

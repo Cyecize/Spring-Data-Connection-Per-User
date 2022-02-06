@@ -197,6 +197,17 @@ public class DatabaseServiceImpl implements DatabaseService {
         return database.getSelectedDatabase();
     }
 
+    @Override
+    public DataSource getCurrentOrmDataSource() {
+        final Database database = this.getDatabase();
+
+        if (database.getOrmDataSource() == null) {
+            throw new NoDatabaseConnectionException();
+        }
+
+        return database.getOrmDataSource();
+    }
+
     private boolean databaseNameExists(List<String> allDatabases, String selectedDatabase) {
         return allDatabases.stream().anyMatch(dbName -> dbName.equalsIgnoreCase(selectedDatabase));
     }
