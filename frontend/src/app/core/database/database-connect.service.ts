@@ -7,6 +7,7 @@ import {FieldError} from "../../shared/field-error/field-error";
 import {BindingErrorResponse} from "../../shared/field-error/binding-error-response";
 import {HttpStatus} from "../../shared/http/http-status";
 import {HttpErrorResponse} from "@angular/common/http";
+import {DatabaseCreateModel} from "./database-create.model";
 
 @Injectable({providedIn: 'root'})
 export class DatabaseConnectService {
@@ -90,5 +91,23 @@ export class DatabaseConnectService {
 
   public getAllDatabases(): Observable<string[]> {
     return this.repository.fetchDatabases();
+  }
+
+  async createDatabase(data: DatabaseCreateModel): Promise<FieldError[]> {
+    try {
+      await firstValueFrom(this.repository.createDatabase(data));
+      return [];
+    } catch (error: HttpErrorResponse | any) {
+      if (error.status === HttpStatus.NOT_ACCEPTABLE) {
+        return (error.error as BindingErrorResponse).fieldErrors;
+      } else {
+        return [{
+          message: error.error.message,
+          field: ''
+        }];
+      }
+    } finally {
+      this.refreshConnectionStatus();
+    }
   }
 }

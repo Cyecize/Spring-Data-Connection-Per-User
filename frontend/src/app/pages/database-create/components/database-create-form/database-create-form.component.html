@@ -1,0 +1,43 @@
+<form method="post" id="formDbCreation" [formGroup]="form" (ngSubmit)="onFormSubmit()">
+  <h3 *ngFor="let error of errors | filterFieldError:''" class="alert alert-danger">{{error.message}}</h3>
+  <div>
+    <label for="databaseName">Database Name</label>
+    <input type="text" id="databaseName" formControlName="databaseName"
+           class="form-control" placeholder="db_example_name">
+    <app-field-error [errors]="errors" fieldName="databaseName"></app-field-error>
+  </div>
+  <hr>
+  <h5 class="m-0 p-0">Admin Details</h5>
+  <div>
+    <label for="username">Username</label>
+    <input type="text" id="username" formControlName="adminUsername" placeholder="John123" class="form-control">
+    <app-field-error [errors]="errors" fieldName="adminUsername"></app-field-error>
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" formControlName="adminPassword" placeholder="******" class="form-control">
+    <app-field-error [errors]="errors" fieldName="adminPassword"></app-field-error>
+  </div>
+
+  <div>
+    <label for="passwordConfirm">Confirm Password</label>
+    <input type="password" id="passwordConfirm" formControlName="passwordConfirm" placeholder="******" class="form-control">
+    <app-field-error [errors]="errors" fieldName="passwordConfirm"></app-field-error>
+  </div>
+
+  <div class="form-group text-end">
+    <div class="mt-1">
+      <div class="m-1 d-inline">
+        <a [routerLink]="routes.DATABASE_SELECT.toString()" class="btn btn-dark">
+          Back
+        </a>
+      </div>
+      <div class="m-1 d-inline">
+        <button [disabled]="!form.valid" class="btn btn-info" id="btnCreate">
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
