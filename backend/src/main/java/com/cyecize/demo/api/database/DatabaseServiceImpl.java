@@ -58,6 +58,15 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
     }
 
+    private void clearOldConnection(Database database) {
+        try {
+            database.close();
+        } catch (Exception e) {
+            log.error("Error while closing old DB connection!", e);
+            throw new ApiException("Error while closing old DB connection!");
+        }
+    }
+
     private void setHikariConfig(Database database, DatabaseConnectDto databaseConnectDto) {
         final HikariConfig config = new HikariConfig();
 
@@ -191,6 +200,14 @@ public class DatabaseServiceImpl implements DatabaseService {
                 .migrate();
     }
 
+    private boolean databaseNameExists(List<String> allDatabases, String selectedDatabase) {
+        return allDatabases.stream().anyMatch(dbName -> dbName.equalsIgnoreCase(selectedDatabase));
+    }
+
+    private DataSource getDataSource(Database database) {
+        return Objects.requireNonNullElse(database.getJdbcDataSource(), database.getOrmDataSource());
+    }
+
     @Override
     public String getSelectedDatabase() {
         final Database database = this.getDatabase();
@@ -206,23 +223,6 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
 
         return database.getOrmDataSource();
-    }
-
-    private boolean databaseNameExists(List<String> allDatabases, String selectedDatabase) {
-        return allDatabases.stream().anyMatch(dbName -> dbName.equalsIgnoreCase(selectedDatabase));
-    }
-
-    private void clearOldConnection(Database database) {
-        try {
-            database.close();
-        } catch (Exception e) {
-            log.error("Error while closing old DB connection!", e);
-            throw new ApiException("Error while closing old DB connection!");
-        }
-    }
-
-    private DataSource getDataSource(Database database) {
-        return Objects.requireNonNullElse(database.getJdbcDataSource(), database.getOrmDataSource());
     }
 
     private Database getDatabase() {
