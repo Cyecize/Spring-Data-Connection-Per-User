@@ -12,5 +12,7 @@ public interface DatabaseService {
 
     void selectDatabase(String selectedDatabase);
 
+    void createDatabase(String databaseName);
+
     String getSelectedDatabase();
 }

@@ -125,6 +125,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         if (!database.getDatabaseProvider().getConnectionUtil().hasValidFlywayTable(ormDataSource)) {
             dataSourceConfig.setJdbcUrl(oldUrl);
+            ormDataSource.close();
             throw new ApiException("Database is incompatible!");
         }
 
@@ -132,18 +133,54 @@ public class DatabaseServiceImpl implements DatabaseService {
             this.executeFlywayMigrations(database.getDatabaseProvider(), ormDataSource);
         } catch (Exception ex) {
             dataSourceConfig.setJdbcUrl(oldUrl);
+            ormDataSource.close();
             throw new ApiException("Database is corrupted!");
         }
 
-        database.closeJdbcConnection();
+        database.closeConnections();
         database.setOrmDataSource(ormDataSource);
         database.setSelectedDatabase(selectedDatabase);
     }
 
     @Override
-    public String getSelectedDatabase() {
+    public void createDatabase(String databaseName) {
         final Database database = this.getDatabase();
-        return database.getSelectedDatabase();
+        if (!this.hasEstablishedConnection(database)) {
+            throw new NoDatabaseConnectionException();
+        }
+
+        final List<String> allDatabases = this.findAllDatabases(database);
+
+        if (this.databaseNameExists(allDatabases, databaseName)) {
+            throw new ApiException("Database name already exists!");
+        }
+
+        database.getDatabaseProvider().getConnectionUtil().createDatabase(this.getDataSource(database), databaseName);
+
+        final HikariConfig dataSourceConfig = database.getDataSourceConfig();
+        final String oldUrl = dataSourceConfig.getJdbcUrl();
+        final ServerConnectionProperties serverProperties = database.getServerConnectionProperties();
+
+        dataSourceConfig.setJdbcUrl(database.getDatabaseProvider().getConnectionUtil().getConnectionString(
+                serverProperties.getHost(),
+                serverProperties.getPort(),
+                serverProperties.getUseSSL(),
+                databaseName
+        ));
+
+        final HikariDataSource ormDataSource = new HikariDataSource(dataSourceConfig);
+
+        try {
+            this.executeFlywayMigrations(database.getDatabaseProvider(), ormDataSource);
+        } catch (Exception ex) {
+            dataSourceConfig.setJdbcUrl(oldUrl);
+            ormDataSource.close();
+            throw new ApiException("Database is corrupted!");
+        }
+
+        database.closeConnections();
+        database.setOrmDataSource(ormDataSource);
+        database.setSelectedDatabase(databaseName);
     }
 
     private void executeFlywayMigrations(DatabaseProvider provider, DataSource dataSource) {
@@ -152,6 +189,12 @@ public class DatabaseServiceImpl implements DatabaseService {
                 .locations(String.format("migrations/%s", provider.getMigrationsFolderName()))
                 .load()
                 .migrate();
+    }
+
+    @Override
+    public String getSelectedDatabase() {
+        final Database database = this.getDatabase();
+        return database.getSelectedDatabase();
     }
 
     private boolean databaseNameExists(List<String> allDatabases, String selectedDatabase) {

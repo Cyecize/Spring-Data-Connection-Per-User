@@ -13,4 +13,6 @@ public interface ConnectionUtil {
     List<String> findAllDatabases(DataSource dataSource) throws SQLException;
 
     boolean hasValidFlywayTable(DataSource dataSource);
+
+    void createDatabase(DataSource dataSource, String databaseName);
 }

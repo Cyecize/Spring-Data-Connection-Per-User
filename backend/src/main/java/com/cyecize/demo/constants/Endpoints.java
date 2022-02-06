@@ -9,6 +9,7 @@ public final class Endpoints {
     public static final String DATABASE_CONNECT                     = "/database/connect";
     public static final String DATABASE_SELECT                      = "/database/select";
     public static final String DATABASE_SELECTED                    = "/database/selected";
+    public static final String DATABASE_CREATE                      = "/database/create";
     public static final String DATABASES                            = "/databases";
 
     // Session

@@ -43,13 +43,21 @@ public class Database implements AutoCloseable {
         }
     }
 
-    public void closeJdbcConnection() {
+    public void closeConnections() {
         try {
             if (this.jdbcDataSource != null) {
                 this.jdbcDataSource.close();
             }
         } finally {
             this.jdbcDataSource = null;
+        }
+
+        try {
+            if (this.ormDataSource != null) {
+                this.ormDataSource.close();
+            }
+        } finally {
+            this.ormDataSource = null;
         }
     }
 }

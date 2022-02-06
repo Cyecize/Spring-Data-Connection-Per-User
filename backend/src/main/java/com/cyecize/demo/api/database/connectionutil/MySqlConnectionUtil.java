@@ -1,6 +1,8 @@
 package com.cyecize.demo.api.database.connectionutil;
 
 import com.cyecize.demo.constants.General;
+import com.cyecize.demo.error.ApiException;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class MySqlConnectionUtil implements ConnectionUtil {
     @Override
     public String getConnectionString(String host, int port, boolean useSSL) {
@@ -69,5 +72,18 @@ public class MySqlConnectionUtil implements ConnectionUtil {
         }
 
         return false;
+    }
+
+    @Override
+    public void createDatabase(DataSource dataSource, String databaseName) {
+        final String query = String.format("CREATE DATABASE %s", databaseName);
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(query);
+        } catch (SQLException error) {
+            log.error("Error while crating database!", error);
+            throw new ApiException("Error while crating database!");
+        }
     }
 }

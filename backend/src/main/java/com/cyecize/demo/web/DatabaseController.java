@@ -1,5 +1,6 @@
 package com.cyecize.demo.web;
 
+import com.cyecize.demo.api.database.CreateDatabaseDto;
 import com.cyecize.demo.api.database.DatabaseConnectDto;
 import com.cyecize.demo.api.database.DatabaseProvider;
 import com.cyecize.demo.api.database.DatabaseProviderDto;
@@ -59,6 +60,12 @@ public class DatabaseController {
     @GetMapping(Endpoints.DATABASE_SELECTED)
     public CurrentDatabaseDto getSelectedDatabase() {
         return new CurrentDatabaseDto(this.databaseService.getSelectedDatabase());
+    }
+
+    @PostMapping(Endpoints.DATABASE_CREATE)
+    @ResponseStatus(HttpStatus.OK)
+    public void createDatabase(@Valid @RequestBody CreateDatabaseDto createDatabaseDto) {
+        this.databaseService.createDatabase(createDatabaseDto.getDatabaseName());
     }
 
     @GetMapping(Endpoints.DATABASES)
