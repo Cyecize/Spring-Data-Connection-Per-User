@@ -12,10 +12,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="connDropdown"
              data-bs-toggle="dropdown"
              aria-expanded="false">
-            Connection
-<!--            {% if utils.hasOrmConnection(request) %}-->
-<!--            <small>( {{ utils.getDatabaseName(request) }} )</small>-->
-<!--            {% endif %}-->
+            Connection <span *ngIf="selectedDatabase">( {{selectedDatabase}} )</span>
           </a>
           <div class="dropdown-menu" aria-labelledby="connDropdown">
             <a class="dropdown-item" [routerLink]="routes.DATABASE_CONNECT.toString()">

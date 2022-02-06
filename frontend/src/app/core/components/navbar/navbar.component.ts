@@ -15,8 +15,11 @@ export class NavbarComponent implements OnInit {
 
   hasDbConnection!: boolean;
 
+  selectedDatabase!: string;
+
   ngOnInit(): void {
     this.databaseService.hasEstablishedConnection().subscribe(value => this.hasDbConnection = value);
+    this.databaseService.getSelectedDatabase().subscribe(value => this.selectedDatabase = value);
   }
 
 }

@@ -1,12 +1,15 @@
 <div class="mr-auto mt-2 pt-3">
   <h3>Select Database</h3>
 
-  <form method="post">
+  <h3 *ngFor="let error of errors | filterFieldError:''" class="alert alert-danger">{{error.message}}</h3>
+  <form method="post" [formGroup]="form" (ngSubmit)="onFormSubmit()">
     <div>
       <label for="dbName">Database Name</label>
-      <select name="databaseName" id="dbName" required class="form-control selectize">
+      <select formControlName="selectedDatabase" name="databaseName" id="dbName" class="form-control selectize">
+        <option value="" disabled selected>-- Choose --</option>
         <option *ngFor="let db of databases">{{db}}</option>
       </select>
+      <app-field-error [errors]="errors" fieldName="selectedDatabase"></app-field-error>
     </div>
 
     <div class="form-group text-end">
@@ -22,7 +25,7 @@
           </a>
         </div>
         <div class="m-1  d-inline">
-          <button type="submit" class="btn btn-info">
+          <button [disabled]="!form.valid" type="submit" class="btn btn-info">
             Choose
           </button>
         </div>
