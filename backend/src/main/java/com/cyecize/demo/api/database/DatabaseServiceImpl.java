@@ -225,6 +225,12 @@ public class DatabaseServiceImpl implements DatabaseService {
         return database.getOrmDataSource();
     }
 
+    @Override
+    public Optional<DatabaseProvider> getCurrentDatabaseProvider() {
+        return this.getDatabase(this.sessionStorageService.getCurrentSession())
+                .map(Database::getDatabaseProvider);
+    }
+
     private Database getDatabase() {
         final Optional<Session> currentSession = this.sessionStorageService.getCurrentSession();
         if (currentSession.isEmpty()) {
@@ -234,5 +240,15 @@ public class DatabaseServiceImpl implements DatabaseService {
         currentSession.get().getSessionStorage().putIfAbsent(DATABASE_SESSION_ATTR_NAME, new Database());
 
         return (Database) currentSession.get().getSessionStorage().get(DATABASE_SESSION_ATTR_NAME);
+    }
+
+    private Optional<Database> getDatabase(Optional<Session> session) {
+        if (session.isEmpty()) {
+            return Optional.empty();
+        }
+
+        session.get().getSessionStorage().putIfAbsent(DATABASE_SESSION_ATTR_NAME, new Database());
+
+        return Optional.of((Database) session.get().getSessionStorage().get(DATABASE_SESSION_ATTR_NAME));
     }
 }

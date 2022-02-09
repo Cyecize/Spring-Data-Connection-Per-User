@@ -2,6 +2,7 @@ package com.cyecize.demo.api.database;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 public interface DatabaseService {
 
@@ -18,4 +19,7 @@ public interface DatabaseService {
     String getSelectedDatabase();
 
     DataSource getCurrentOrmDataSource();
+
+    Optional<DatabaseProvider> getCurrentDatabaseProvider();
+
 }
