@@ -16,7 +16,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -25,10 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Configuration
-@EnableTransactionManagement
 @RequiredArgsConstructor
 public class EntityManagerConfig {
 
@@ -88,9 +87,18 @@ public class EntityManagerConfig {
                 routingDataSource
         );
 
+        final int hashcode = UUID.randomUUID().toString().hashCode();
         final Object emf = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                 new Class[]{EntityManagerFactory.class},
                 (proxy, method, args) -> {
+                    if (method.getName().equals("hashCode")) {
+                        return hashcode;
+                    }
+
+                    if (method.getName().equals("equals")) {
+                        return proxy == args[0];
+                    }
+
                     Object instance = defaultEmf;
 
                     Optional<DatabaseProvider> databaseProvider = this.databaseService.getCurrentDatabaseProvider();
