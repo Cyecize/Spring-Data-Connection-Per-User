@@ -5,6 +5,8 @@ import com.cyecize.demo.api.database.DatabaseConnectDto;
 import com.cyecize.demo.api.database.DatabaseProvider;
 import com.cyecize.demo.api.database.DatabaseProviderDto;
 import com.cyecize.demo.api.database.DatabaseService;
+import com.cyecize.demo.api.user.CreateUserDto;
+import com.cyecize.demo.api.user.UserService;
 import com.cyecize.demo.constants.Endpoints;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,11 +30,14 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@PreAuthorize("isAnonymous()")
 public class DatabaseController {
 
     private final ModelMapper modelMapper;
 
     private final DatabaseService databaseService;
+
+    private final UserService userService;
 
     @GetMapping(Endpoints.DATABASE_PROVIDERS)
     public List<DatabaseProviderDto> getDatabaseProviders() {
@@ -64,8 +70,9 @@ public class DatabaseController {
 
     @PostMapping(Endpoints.DATABASE_CREATE)
     @ResponseStatus(HttpStatus.OK)
-    public void createDatabase(@Valid @RequestBody CreateDatabaseDto createDatabaseDto) {
-        this.databaseService.createDatabase(createDatabaseDto.getDatabaseName());
+    public void createDatabase(@Valid @RequestBody CreateDatabaseDto dto) {
+        this.databaseService.createDatabase(dto.getDatabaseName());
+        this.userService.createAdmin(new CreateUserDto(dto.getAdminUsername(), dto.getAdminPassword()));
     }
 
     @GetMapping(Endpoints.DATABASES)

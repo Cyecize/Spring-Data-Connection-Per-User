@@ -1,0 +1,13 @@
+package com.cyecize.demo.api.user;
+
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    @EntityGraph("userAllAttributes")
+    User findByUsername(String username);
+
+    @EntityGraph("userAllAttributes")
+    User findUserById(Long id);
+}

@@ -14,4 +14,11 @@ public final class Endpoints {
 
     // Session
     public static final String SESSION                              = "/session";
+
+    // Security
+    public static final String LOGIN                                = "/login";
+    public static final String LOGOUT                               = "/deauth";
+
+    // User
+    public static final String USER_ME                              = "/user/me";
 }
