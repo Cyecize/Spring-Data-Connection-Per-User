@@ -3,6 +3,7 @@ import {AppRoutingPath} from "../../app-routing.path";
 import {DatabaseConnectService} from "../../core/database/database-connect.service";
 import {FieldError} from "../../shared/field-error/field-error";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {RouteNavigator} from "../../core/routing/route-navigator.service";
 
 @Component({
   selector: 'app-database-select',
@@ -12,7 +13,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class DatabaseSelectComponent implements OnInit {
 
   constructor(private databaseService: DatabaseConnectService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private nav: RouteNavigator) {
 
   }
 
@@ -38,5 +40,8 @@ export class DatabaseSelectComponent implements OnInit {
   async onFormSubmit() {
     this.errors = [];
     this.errors = await this.databaseService.selectDatabase(this.form.value);
+    if (this.errors.length == 0) {
+      this.nav.navigate(AppRoutingPath.LOGIN);
+    }
   }
 }

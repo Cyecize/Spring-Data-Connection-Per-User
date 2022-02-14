@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/database-create/database-create.module').then(m => m.DatabaseCreateModule),
   },
   {
+    path: AppRoutingPath.LOGIN.path,
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+  },
+  {
     path: AppRoutingPath.HOME.path,
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
     pathMatch: 'full'

@@ -11,5 +11,12 @@ export class Endpoints {
   public static readonly DATABASES                            = '/databases';
 
   // Session
-  public static readonly SESSION                              = "/session";
+  public static readonly SESSION                              = '/session';
+
+  // Security
+  public static readonly LOGIN                                = '/login';
+  public static readonly LOGOUT                               = '/deauth';
+
+  // User
+  public static readonly USER_ME                              = '/user/me';
 }
