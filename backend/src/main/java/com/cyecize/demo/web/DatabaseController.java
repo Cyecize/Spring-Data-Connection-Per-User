@@ -47,6 +47,7 @@ public class DatabaseController {
     }
 
     @GetMapping(Endpoints.DATABASE_HAS_ESTABLISHED_CONNECTION)
+    @PreAuthorize("permitAll()")
     public boolean hasEstablishedConnection() {
         return this.databaseService.hasEstablishedConnection();
     }
@@ -64,6 +65,7 @@ public class DatabaseController {
     }
 
     @GetMapping(Endpoints.DATABASE_SELECTED)
+    @PreAuthorize("permitAll()")
     public CurrentDatabaseDto getSelectedDatabase() {
         return new CurrentDatabaseDto(this.databaseService.getSelectedDatabase());
     }
