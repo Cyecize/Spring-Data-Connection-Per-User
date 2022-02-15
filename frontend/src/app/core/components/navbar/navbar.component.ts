@@ -36,4 +36,8 @@ export class NavbarComponent implements OnInit {
       this.nav.navigate(AppRoutingPath.LOGIN);
     });
   }
+
+  getRoles(currentUser: UserModel): string {
+    return currentUser.roles.map(r => r.authority).join(", ");
+  }
 }
