@@ -1,6 +1,9 @@
 import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AppRoutingPath} from "./app-routing.path";
+import {IsAuthenticatedGuard} from "./core/guards/is-authenticated.guard";
+import {HasConnectionGuard} from "./core/guards/has-connection.guard";
+import {HasSelectedDatabaseGuard} from "./core/guards/has-selected-database.guard";
 
 const routes: Routes = [
   {
@@ -17,12 +20,14 @@ const routes: Routes = [
   },
   {
     path: AppRoutingPath.LOGIN.path,
-    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canActivate: [HasConnectionGuard, HasSelectedDatabaseGuard]
   },
   {
     path: AppRoutingPath.HOME.path,
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [IsAuthenticatedGuard]
   },
   {
     path: '**',

@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, firstValueFrom, map, Observable} from "rxjs";
+import {BehaviorSubject, catchError, firstValueFrom, map, Observable, of} from "rxjs";
 import {UserModel} from "./user.model";
 import {UserRepository} from "./user.repository";
 import {FieldError} from "../../shared/field-error/field-error";
@@ -54,5 +54,9 @@ export class UserService {
       this.currentUser.next(null);
       return value;
     }));
+  }
+
+  public isLoggedIn(): Observable<boolean> {
+    return this.repository.fetch().pipe(map(value => true), catchError(err => of(false)));
   }
 }

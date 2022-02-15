@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from "@angular/core";
 import {DatabaseConnectRepository} from "./database-connect.repository";
-import {firstValueFrom, Observable} from "rxjs";
+import {catchError, firstValueFrom, map, Observable, of} from "rxjs";
 import {ObjectUtils} from "../../shared/util/object-utils";
 import {DatabaseConnectModel} from "./database-connect.model";
 import {FieldError} from "../../shared/field-error/field-error";
@@ -51,6 +51,14 @@ export class DatabaseConnectService {
       this.selectedDatabase = value.database;
       this.selectedDatabaseEvent.emit(value.database);
     })
+  }
+
+  public hasSelectedDatabase(): Observable<boolean> {
+    return this.repository.fetchSelectedDatabase()
+      .pipe(
+        map(value => !ObjectUtils.isNil(value.database)),
+        catchError(err => of(false))
+      );
   }
 
   public async connectToDatabase(model: DatabaseConnectModel): Promise<FieldError[]> {
