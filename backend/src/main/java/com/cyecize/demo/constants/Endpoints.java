@@ -21,4 +21,9 @@ public final class Endpoints {
 
     // User
     public static final String USER_ME                              = "/user/me";
+
+    // TO-DO List
+    public static final String TASKS                                = "/tasks";
+    public static final String TASKS_SEARCH                         = "/tasks/search";
+    public static final String TASK                                 = "/task/{id}";
 }

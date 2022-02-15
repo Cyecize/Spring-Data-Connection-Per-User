@@ -1,4 +1,4 @@
-package com.cyecize.demo.api.tesk;
+package com.cyecize.demo.api.task;
 
 import lombok.Data;
 
