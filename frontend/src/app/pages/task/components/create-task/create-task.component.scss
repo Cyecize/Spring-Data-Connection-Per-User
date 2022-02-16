@@ -1,0 +1,12 @@
+.form-control {
+  border-color: transparent;
+}
+
+.form-control:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.select-input.form-control[readonly]:not([disabled]) {
+  background-color: #fbfbfb;
+}

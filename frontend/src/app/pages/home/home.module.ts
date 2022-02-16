@@ -2,6 +2,7 @@ import {NgModule} from "@angular/core";
 import {SharedModule} from "../../shared/shared.module";
 import {HomeComponent} from "./home.component";
 import {RouterModule, Routes} from "@angular/router";
+import {TaskModule} from "../task/task.module";
 
 const routes: Routes = [
   {
@@ -11,7 +12,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, RouterModule.forChild(routes), TaskModule],
   declarations: [HomeComponent],
   exports: [HomeComponent]
 })

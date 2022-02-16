@@ -19,4 +19,9 @@ export class Endpoints {
 
   // User
   public static readonly USER_ME                              = '/user/me';
+
+  // TO-DO List
+  public static readonly TASKS                                = '/tasks';
+  public static readonly TASKS_SEARCH                         = '/tasks/search';
+  public static readonly TASK                                 = '/task/{id}';
 }
