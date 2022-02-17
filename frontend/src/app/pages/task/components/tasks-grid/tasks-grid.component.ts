@@ -17,6 +17,9 @@ export class TasksGridComponent implements OnInit {
   @Output()
   pageChanged: EventEmitter<number> = new EventEmitter<number>();
 
+  @Output()
+  onTaskDelete: EventEmitter<TaskModel> = new EventEmitter<TaskModel>();
+
   ngOnInit(): void {
   }
 
@@ -26,5 +29,9 @@ export class TasksGridComponent implements OnInit {
 
   changePage(page: number) {
     this.pageChanged.next(page);
+  }
+
+  deleteTask(task: TaskModel) {
+    this.onTaskDelete.next(task);
   }
 }

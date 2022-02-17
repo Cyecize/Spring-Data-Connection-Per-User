@@ -5,6 +5,7 @@ import {TaskService} from "../../core/task/task.service";
 import {TaskQuery} from "../../core/task/task.query";
 import {Page} from "../../shared/util/page";
 import {TaskModel} from "../../core/task/task.model";
+import {catchError, of} from "rxjs";
 
 @Component({
   selector: 'app-task',
@@ -21,6 +22,10 @@ export class TaskComponent implements OnInit {
   taskQuery!: TaskQuery;
 
   tasks!: Page<TaskModel>;
+
+  showDeleteConfirmModal!: boolean;
+  deleteConfirmModalTaskDescription!: string;
+  deleteConfirmModalSelectedTaskId!: number;
 
   ngOnInit(): void {
     this.taskService.tasks$.subscribe(value => {
@@ -47,5 +52,27 @@ export class TaskComponent implements OnInit {
 
     this.taskQuery.page = page;
     this.taskService.loadTasks(this.taskQuery);
+  }
+
+  deleteTask(task: TaskModel) {
+    this.deleteConfirmModalTaskDescription = task.description;
+    this.deleteConfirmModalSelectedTaskId = task.id;
+    this.showDeleteConfirmModal = true;
+  }
+
+  confirmDeletionOfTask() {
+    this.taskService.deleteTask(this.deleteConfirmModalSelectedTaskId).pipe(catchError(err => {
+      this.onFilterChange(this.taskQuery);
+      return of(err);
+    })).subscribe(value => {
+      this.onFilterChange(this.taskQuery);
+    });
+    this.cancelDeleteModal();
+  }
+
+  cancelDeleteModal() {
+    this.deleteConfirmModalTaskDescription = '';
+    this.deleteConfirmModalSelectedTaskId = 0;
+    this.showDeleteConfirmModal = false;
   }
 }

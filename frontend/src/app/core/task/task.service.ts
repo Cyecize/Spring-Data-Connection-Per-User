@@ -1,7 +1,7 @@
 import {TaskRepository} from "./task.repository";
 import {TaskCreate} from "./task-create";
 import {FieldError} from "../../shared/field-error/field-error";
-import {BehaviorSubject, firstValueFrom} from "rxjs";
+import {BehaviorSubject, firstValueFrom, Observable} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 import {HttpStatus} from "../../shared/http/http-status";
 import {BindingErrorResponse} from "../../shared/field-error/binding-error-response";
@@ -35,6 +35,10 @@ export class TaskService {
         }];
       }
     }
+  }
+
+  public deleteTask(taskId: number): Observable<any> {
+    return this.repository.delete(taskId);
   }
 
   public loadTasks(query: TaskQuery): void {

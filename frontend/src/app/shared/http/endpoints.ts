@@ -23,5 +23,5 @@ export class Endpoints {
   // TO-DO List
   public static readonly TASKS                                = '/tasks';
   public static readonly TASKS_SEARCH                         = '/tasks/search';
-  public static readonly TASK                                 = '/task/{id}';
+  public static readonly TASK                                 = '/task/:id';
 }
