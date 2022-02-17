@@ -1,13 +1,29 @@
 <div class="card">
   <div class="card-body">
-    <div class="d-flex flex-row align-items-center">
-      <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
-             placeholder="Add new !...">
-      <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i
-        class="fas fa-calendar-alt fa-lg me-3"></i></a>
-      <div>
-        <button type="button" class="btn btn-primary">Add</button>
+<!--    <div class="d-flex flex-row align-content-between justify-content-between">-->
+    <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+      <div class="row">
+        <div class="col-md-6 d-flex flex-row">
+          <input formControlName="descr" type="text" class="form-control form-control-lg" placeholder="Add new...">
+        </div>
+
+        <div class="col-md-5 d-flex flex-row justify-content-end">
+          <div class="p-1">
+            <span class="d-block">Due Date</span>
+          </div>
+
+          <div class="p-1">
+            <dp-date-picker [config]="datePickerConfig" #datePicker></dp-date-picker>
+          </div>
+
+          <div class="p-1">
+            <span (click)="openDatePicker()" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></span>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button type="submit" [disabled]="!form.valid"  class="btn btn-primary">Add</button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>
