@@ -1,6 +1,8 @@
 package com.cyecize.demo.api.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,7 +24,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString
 @NamedEntityGraph(name = "userAllAttributes", includeAllAttributes = true)
 public class User implements UserDetails {
 
@@ -41,6 +45,7 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ToString.Exclude
     private List<GrantedAuthority> roles;
 
     public User() {

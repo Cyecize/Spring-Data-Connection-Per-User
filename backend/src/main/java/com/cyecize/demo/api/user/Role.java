@@ -1,6 +1,8 @@
 package com.cyecize.demo.api.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -11,7 +13,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
+@ToString
 public class Role implements GrantedAuthority {
 
     @Id

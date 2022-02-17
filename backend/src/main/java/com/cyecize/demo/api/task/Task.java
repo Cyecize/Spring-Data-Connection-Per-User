@@ -1,6 +1,8 @@
 package com.cyecize.demo.api.task;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
+@ToString
 public class Task {
 
     @Id
