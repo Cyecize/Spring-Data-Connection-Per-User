@@ -30,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
         final Task task = this.modelMapper.map(dto, Task.class);
         task.setCreateDate(LocalDateTime.now());
         task.setInProgress(true);
+        task.setUserId(currentUser.getId());
 
         return this.taskRepository.save(task);
     }
