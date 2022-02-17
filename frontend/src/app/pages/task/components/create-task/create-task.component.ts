@@ -55,7 +55,9 @@ export class CreateTaskComponent implements OnInit {
 
     this.formSubmitted.emit({
       dueDate,
-      description: this.form.value.description
+      description: this.form.value.descr
     });
+
+    this.form.reset();
   }
 }

@@ -9,8 +9,9 @@
             <u>My Tasks</u>
           </p>
 
+          <h3 *ngFor="let error of errors" class="alert alert-danger">{{error.message}}</h3>
           <div class="pb-2">
-            <app-create-task></app-create-task>
+            <app-create-task (formSubmitted)="onCreateTask($event)"></app-create-task>
           </div>
 
           <hr class="my-4">
