@@ -1,93 +1,37 @@
-<ul class="list-group list-group-horizontal rounded-0 bg-transparent">
+<ul *ngFor="let task of tasks?.content" class="list-group list-group-horizontal rounded-0">
   <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
     <div class="form-check">
-      <input
-        class="form-check-input me-0"
-        type="checkbox"
-        value=""
-        id="flexCheckChecked1"
-        aria-label="..."
-        checked
-      />
+      <input class="form-check-input me-0" type="checkbox" [checked]="!task.inProgress"/>
     </div>
   </li>
   <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-    <p class="lead fw-normal mb-0">Buy groceries for next week</p>
+    <p class="lead fw-normal mb-0">{{task.description}}</p>
   </li>
-  <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
-    <div class="d-flex flex-row justify-content-end mb-1">
-      <a href="#!" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i
-        class="fas fa-pencil-alt me-3"></i></a>
-      <a href="#!" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
-        class="fas fa-trash-alt"></i></a>
-    </div>
-    <div class="text-end text-muted">
-      <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
-        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p></a>
-    </div>
-  </li>
-</ul>
-<ul class="list-group list-group-horizontal rounded-0">
-  <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-    <div class="form-check">
-      <input
-        class="form-check-input me-0"
-        type="checkbox"
-        value=""
-        id="flexCheckChecked2"
-        aria-label="..."
-      />
-    </div>
-  </li>
-  <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-    <p class="lead fw-normal mb-0">Renew car insurance</p>
-  </li>
-  <li class="list-group-item px-3 py-1 d-flex align-items-center border-0 bg-transparent">
+  <li *ngIf="task.dueDate" class="list-group-item px-3 py-1 d-flex align-items-center border-0 bg-transparent">
     <div class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-light">
       <p class="small mb-0">
-        <a href="#!" data-mdb-toggle="tooltip" title="Due on date">
-          <i class="fas fa-hourglass-half me-2 text-warning"></i>
-        </a>
-        28th Jun 2020
+        <span title="Due on date"><i class="fas fa-hourglass-half me-2 text-warning"></i></span>
+        {{task.dueDate}}
       </p>
     </div>
   </li>
   <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
     <div class="d-flex flex-row justify-content-end mb-1">
-      <a href="#!" class="text-info" data-mdb-toggle="tooltip" title="Edit todo"><i
-        class="fas fa-pencil-alt me-3"></i></a>
-      <a href="#!" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
-        class="fas fa-trash-alt"></i></a>
+      <span class="text-info" title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></span>
+      <span class="text-danger" title="Delete todo"><i class="fas fa-trash-alt"></i></span>
     </div>
     <div class="text-end text-muted">
-      <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
-        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p></a>
+      <span class="text-muted" title="Created date">
+        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>{{task.createDate}}</p>
+      </span>
     </div>
   </li>
 </ul>
-<ul class="list-group list-group-horizontal rounded-0 mb-2">
-  <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-    <div class="form-check">
-      <input
-        class="form-check-input me-0"
-        type="checkbox"
-        value=""
-        id="flexCheckChecked3"
-        aria-label="..."
-      />
-    </div>
-  </li>
-  <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-    <p class="lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">Sign up for online course</p>
-  </li>
-  <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
-    <div class="d-flex flex-row justify-content-end mb-1">
-      <a href="#!" class="text-danger" data-mdb-toggle="tooltip" title="Delete todo"><i
-        class="fas fa-trash-alt"></i></a>
-    </div>
-    <div class="text-end text-muted">
-      <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
-        <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>28th Jun 2020</p></a>
-    </div>
-  </li>
-</ul>
+
+<nav aria-label="Page navigation example" *ngIf="tasks">
+  <ul class="pagination">
+    <li *ngFor="let page of numSequence(tasks.totalPages); let i = index;" (click)="changePage(i)" class="page-item">
+      <span style="cursor: pointer;" class="page-link">{{i + 1}}</span>
+    </li>
+  </ul>
+</nav>

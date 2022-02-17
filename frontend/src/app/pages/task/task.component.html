@@ -16,9 +16,9 @@
 
           <hr class="my-4">
 
-          <app-tasks-filter></app-tasks-filter>
+          <app-tasks-filter (filtersChanged)="onFilterChange($event)"></app-tasks-filter>
 
-          <app-tasks-grid></app-tasks-grid>
+          <app-tasks-grid [tasks]="tasks" (pageChanged)="onPageChange($event)"></app-tasks-grid>
         </div>
       </div>
     </div>

@@ -1,16 +1,39 @@
-<div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
-  <p class="small mb-0 me-2 text-muted">Filter</p>
-  <select class="select form-control">
-    <option value="1">All</option>
-    <option value="2">Completed</option>
-    <option value="3">Active</option>
-    <option value="4">Has due date</option>
-  </select>
-  <p class="small mb-0 ms-4 me-2 text-muted">Sort</p>
-  <select class="select">
-    <option value="1">Added date</option>
-    <option value="2">Due date</option>
-  </select>
-  <a href="#!" style="color: #23af89;" data-mdb-toggle="tooltip" title="Ascending"><i
-    class="fas fa-sort-amount-down-alt ms-2"></i></a>
-</div>
+<form [formGroup]="form">
+  <div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+    <p class="small mb-0 ms-4 me-2 text-muted">Description</p>
+    <input class="form-control" type="text" formControlName="description">
+
+    <p class="small mb-0 ms-4 me-2 text-muted">Page Size</p>
+    <input class="form-control w-25" type="number" step="1" formControlName="size">
+
+    <p class="small mb-0 me-2 ms-2 text-muted">Due Date</p>
+    <select formControlName="hasDueDate" class="select form-control w-25">
+      <option [value]="''">All</option>
+      <option [value]="true">With Due Date</option>
+      <option [value]="false">Without Due Date</option>
+    </select>
+
+    <p class="small mb-0 me-2 ms-2 text-muted">Status</p>
+    <select formControlName="inProgress" class="select form-control w-25">
+      <option [value]="''">All</option>
+      <option [value]="false">Completed</option>
+      <option [value]="true">Active</option>
+    </select>
+
+    <p class="small mb-0 ms-4 me-2 text-muted">Sort</p>
+    <select formControlName="orderBy" class="select form-control w-25">
+      <option *ngFor="let opt of orderOptions" [value]="opt.property">{{opt.name}}</option>
+    </select>
+
+    <input style="display: none;" formControlName="direction" [(ngModel)]="currentDirection" type="text"/>
+    <span *ngIf="currentDirection === directions.ASC" style="color: #23af89; cursor:pointer;"
+          title="Ascending" (click)="currentDirection = directions.DESC">
+      <i class="fas fa-sort-amount-down-alt ms-2"></i>
+    </span>
+    <span *ngIf="currentDirection === directions.DESC" style="color: #23af89; cursor:pointer;"
+          title="Descending" (click)="currentDirection = directions.ASC">
+      <i class="fas fa-sort-amount-up-alt ms-2"></i>
+    </span>
+  </div>
+
+</form>
