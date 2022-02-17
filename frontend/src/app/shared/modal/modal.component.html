@@ -1,0 +1,10 @@
+<div #modalContainer class="modal-custom" *ngIf="modalShown" (click)="onModalClick($event)">
+
+  <div class="modal-content">
+    <div class="text-end">
+      <i class="fas fa-times" style="cursor: pointer" (click)="closeModal()"></i>
+    </div>
+    <ng-content></ng-content>
+  </div>
+
+</div>
