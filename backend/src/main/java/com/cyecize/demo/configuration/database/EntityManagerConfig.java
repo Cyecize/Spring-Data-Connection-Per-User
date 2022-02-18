@@ -101,7 +101,7 @@ public class EntityManagerConfig {
 
                     Object instance = defaultEmf;
 
-                    Optional<DatabaseProvider> databaseProvider = this.databaseService.getCurrentDatabaseProvider();
+                    final Optional<DatabaseProvider> databaseProvider = this.databaseService.getCurrentDatabaseProvider();
                     if (databaseProvider.isPresent()) {
                         instance = entityManagerFactoryMap.get(databaseProvider.get());
                     }
