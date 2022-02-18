@@ -37,7 +37,7 @@ export class TasksFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      'size': [10, Validators.required],
+      'size': [5, Validators.required],
       'orderBy': [this.orderOptions[0].property, Validators.required],
       'direction': [Direction.DESC, Validators.required],
       'hasDueDate': [''],

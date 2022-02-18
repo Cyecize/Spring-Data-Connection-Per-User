@@ -1,3 +1,13 @@
+
+<nav aria-label="Page navigation example" *ngIf="tasks">
+  <ul class="pagination">
+    <li *ngFor="let page of numSequence(tasks.totalPages); let i = index;" (click)="changePage(i)" class="page-item">
+      <span style="cursor: pointer;" class="page-link">{{i + 1}}</span>
+    </li>
+  </ul>
+</nav>
+
+
 <ul *ngFor="let task of tasks?.content" class="list-group list-group-horizontal rounded-0">
   <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
     <div class="form-check">
@@ -27,11 +37,3 @@
     </div>
   </li>
 </ul>
-
-<nav aria-label="Page navigation example" *ngIf="tasks">
-  <ul class="pagination">
-    <li *ngFor="let page of numSequence(tasks.totalPages); let i = index;" (click)="changePage(i)" class="page-item">
-      <span style="cursor: pointer;" class="page-link">{{i + 1}}</span>
-    </li>
-  </ul>
-</nav>
