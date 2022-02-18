@@ -37,6 +37,22 @@ export class TaskService {
     }
   }
 
+  public async editTask(data: TaskCreate, taskId: number): Promise<FieldError[]> {
+    try {
+      await firstValueFrom(this.repository.update(taskId, data));
+      return [];
+    } catch (error: HttpErrorResponse | any) {
+      if (error.status === HttpStatus.NOT_ACCEPTABLE) {
+        return (error.error as BindingErrorResponse).fieldErrors;
+      } else {
+        return [{
+          message: error.error.message,
+          field: ''
+        }];
+      }
+    }
+  }
+
   public deleteTask(taskId: number): Observable<any> {
     return this.repository.delete(taskId);
   }

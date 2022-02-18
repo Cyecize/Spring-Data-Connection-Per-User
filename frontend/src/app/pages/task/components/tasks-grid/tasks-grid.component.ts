@@ -9,7 +9,8 @@ import {TaskModel} from "../../../../core/task/task.model";
 })
 export class TasksGridComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   @Input()
   tasks!: Page<TaskModel>;
@@ -19,6 +20,9 @@ export class TasksGridComponent implements OnInit {
 
   @Output()
   onTaskDelete: EventEmitter<TaskModel> = new EventEmitter<TaskModel>();
+
+  @Output()
+  onTaskStatusChange = new EventEmitter<{ task: TaskModel; inProgress: boolean }>();
 
   ngOnInit(): void {
   }
@@ -33,5 +37,14 @@ export class TasksGridComponent implements OnInit {
 
   deleteTask(task: TaskModel) {
     this.onTaskDelete.next(task);
+  }
+
+  onStatusChange(task: TaskModel, event: any) {
+    this.onTaskStatusChange.next({
+      task: task,
+      inProgress: !task.inProgress
+    })
+
+    event.preventDefault();
   }
 }

@@ -1,7 +1,7 @@
 <ul *ngFor="let task of tasks?.content" class="list-group list-group-horizontal rounded-0">
   <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
     <div class="form-check">
-      <input class="form-check-input me-0" type="checkbox" [checked]="!task.inProgress"/>
+      <input class="form-check-input me-0" (click)="onStatusChange(task, $event)" type="checkbox" [checked]="!task.inProgress"/>
     </div>
   </li>
   <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">

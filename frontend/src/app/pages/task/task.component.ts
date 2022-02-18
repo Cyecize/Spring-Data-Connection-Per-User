@@ -24,8 +24,10 @@ export class TaskComponent implements OnInit {
   tasks!: Page<TaskModel>;
 
   showDeleteConfirmModal!: boolean;
-  deleteConfirmModalTaskDescription!: string;
-  deleteConfirmModalSelectedTaskId!: number;
+  showChangeTaskStatusModal!: boolean;
+
+  selectedTask!: TaskModel;
+  selectedTaskInProgress!: boolean;
 
   ngOnInit(): void {
     this.taskService.tasks$.subscribe(value => {
@@ -55,13 +57,12 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(task: TaskModel) {
-    this.deleteConfirmModalTaskDescription = task.description;
-    this.deleteConfirmModalSelectedTaskId = task.id;
+    this.selectedTask = task;
     this.showDeleteConfirmModal = true;
   }
 
   confirmDeletionOfTask() {
-    this.taskService.deleteTask(this.deleteConfirmModalSelectedTaskId).pipe(catchError(err => {
+    this.taskService.deleteTask(this.selectedTask.id).pipe(catchError(err => {
       this.onFilterChange(this.taskQuery);
       return of(err);
     })).subscribe(value => {
@@ -71,8 +72,28 @@ export class TaskComponent implements OnInit {
   }
 
   cancelDeleteModal() {
-    this.deleteConfirmModalTaskDescription = '';
-    this.deleteConfirmModalSelectedTaskId = 0;
     this.showDeleteConfirmModal = false;
+  }
+
+  async confirmChangeTaskStatus() {
+    this.errors = [];
+    this.errors = await this.taskService.editTask({
+      description: this.selectedTask.description,
+      dueDate: this.selectedTask.dueDate,
+      inProgress: this.selectedTaskInProgress
+    }, this.selectedTask.id);
+
+    this.cancelChangeTaskStatusModal();
+    this.onFilterChange(this.taskQuery);
+  }
+
+  cancelChangeTaskStatusModal() {
+    this.showChangeTaskStatusModal = false;
+  }
+
+  changeTaskStatus($event: { task: TaskModel; inProgress: boolean }) {
+    this.selectedTask = $event.task;
+    this.selectedTaskInProgress = $event.inProgress;
+    this.showChangeTaskStatusModal = true;
   }
 }

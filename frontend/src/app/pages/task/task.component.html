@@ -21,6 +21,7 @@
           <app-tasks-grid
             [tasks]="tasks"
             (pageChanged)="onPageChange($event)"
+            (onTaskStatusChange)="changeTaskStatus($event)"
             (onTaskDelete)="deleteTask($event)"></app-tasks-grid>
         </div>
       </div>
@@ -29,10 +30,19 @@
 
   <app-modal [(modalShown)]="showDeleteConfirmModal">
     <h4>Do you want to delete this task?</h4>
-    <p>{{deleteConfirmModalTaskDescription}}</p>
+    <p>{{selectedTask?.description}}</p>
     <div class="d-flex justify-content-evenly">
       <button (click)="confirmDeletionOfTask()" class="btn btn-primary">Confirm</button>
       <button (click)="cancelDeleteModal()" class="btn btn-primary">Cancel</button>
+    </div>
+  </app-modal>
+
+  <app-modal [(modalShown)]="showChangeTaskStatusModal">
+    <h4>Do you want to change the status of this task?</h4>
+    <p>{{selectedTask?.description}}</p>
+    <div class="d-flex justify-content-evenly">
+      <button (click)="confirmChangeTaskStatus()" class="btn btn-primary">Confirm</button>
+      <button (click)="cancelChangeTaskStatusModal()" class="btn btn-primary">Cancel</button>
     </div>
   </app-modal>
 </div>
