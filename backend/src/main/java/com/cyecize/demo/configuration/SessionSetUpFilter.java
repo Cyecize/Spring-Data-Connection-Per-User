@@ -26,7 +26,7 @@ public class SessionSetUpFilter implements Filter {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest req = (HttpServletRequest) servletRequest;
-        final String header = req.getHeader(General.AUTHORIZATION_TOKEN);
+        final String header = req.getHeader(General.SESSION_TOKEN);
 
         this.sessionStorageService.setCurrentSession(header);
 

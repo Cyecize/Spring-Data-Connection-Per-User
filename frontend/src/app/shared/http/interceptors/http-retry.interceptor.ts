@@ -18,7 +18,7 @@ export class HttpRetryInterceptor implements HttpInterceptor {
         if (error.status == HttpStatus.FAILED_DEPENDENCY && error.error.message === 'No Session!') {
           return this.sessionService.refreshSession().pipe(
             map(value => req = req.clone({
-              headers: req.headers.set(HttpHeaderType.AUTHORIZATION_TOKEN, value)
+              headers: req.headers.set(HttpHeaderType.SESSION_TOKEN, value)
             })),
             switchMap(() => next.handle(req))
           )

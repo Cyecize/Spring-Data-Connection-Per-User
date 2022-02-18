@@ -22,7 +22,7 @@ public class TokenAuthenticationFilter implements Filter {
                          FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        final String accessToken = httpRequest.getHeader(General.AUTHORIZATION_TOKEN);
+        final String accessToken = httpRequest.getHeader(General.SESSION_TOKEN);
 
         if (accessToken != null) {
             boolean localAuthSuccess = this.authenticationLoader.loadAuthentication(accessToken);

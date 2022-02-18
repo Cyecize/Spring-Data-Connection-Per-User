@@ -15,8 +15,8 @@ export class HttpClientSecuredService extends HttpClientService {
   protected override getHeaders(): HttpHeader {
     const headers = super.getHeaders();
 
-    const authToken = this.cookieService.get(HttpHeaderType.AUTHORIZATION_TOKEN);
-    headers[HttpHeaderType.AUTHORIZATION_TOKEN] = authToken || '';
+    const authToken = this.cookieService.get(HttpHeaderType.SESSION_TOKEN);
+    headers[HttpHeaderType.SESSION_TOKEN] = authToken || '';
 
     return headers;
   }

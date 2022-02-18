@@ -1,5 +1,5 @@
 export enum HttpHeaderType {
-    AUTHORIZATION_TOKEN = 'Authorization-Token',
+    SESSION_TOKEN = 'Session-Token',
     SECURED_ENDPOINT = 'Secured-Endpoint'
 }
 

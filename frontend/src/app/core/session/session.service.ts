@@ -13,7 +13,7 @@ export class SessionService {
 
   public refreshSession(): Observable<string> {
     return this.repository.fetch().pipe(map(value => {
-      this.cookieService.set(HttpHeaderType.AUTHORIZATION_TOKEN, value.sessionId, 1, '/');
+      this.cookieService.set(HttpHeaderType.SESSION_TOKEN, value.sessionId, 1, '/');
       return value.sessionId;
     }));
   }
