@@ -17,7 +17,7 @@
   </li>
   <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
     <div class="d-flex flex-row justify-content-end mb-1">
-      <span class="text-info" title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></span>
+      <span (click)="taskEdit(task)" class="text-info" title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></span>
       <span (click)="deleteTask(task)" class="text-danger" title="Delete todo"><i class="fas fa-trash-alt"></i></span>
     </div>
     <div class="text-end text-muted">

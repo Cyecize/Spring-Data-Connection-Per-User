@@ -22,6 +22,7 @@
             [tasks]="tasks"
             (pageChanged)="onPageChange($event)"
             (onTaskStatusChange)="changeTaskStatus($event)"
+            (onTaskEdit)="editTask($event)"
             (onTaskDelete)="deleteTask($event)"></app-tasks-grid>
         </div>
       </div>
@@ -44,5 +45,9 @@
       <button (click)="confirmChangeTaskStatus()" class="btn btn-primary">Confirm</button>
       <button (click)="cancelChangeTaskStatusModal()" class="btn btn-primary">Cancel</button>
     </div>
+  </app-modal>
+
+  <app-modal [(modalShown)]="showEditTaskModal">
+    <app-task-edit [task]="selectedTask" (formSubmitted)="confirmTaskEdit($event)"></app-task-edit>
   </app-modal>
 </div>

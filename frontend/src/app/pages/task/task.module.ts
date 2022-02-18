@@ -7,6 +7,7 @@ import { TasksFilterComponent } from './components/tasks-filter/tasks-filter.com
 import { TasksGridComponent } from './components/tasks-grid/tasks-grid.component';
 import {DpDatePickerModule} from "ng2-date-picker";
 import {ModalModule} from "../../shared/modal/modal.module";
+import { TaskEditComponent } from './components/task-edit/task-edit.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [SharedModule, RouterModule.forChild(routes), DpDatePickerModule, ModalModule],
-  declarations: [TaskComponent, CreateTaskComponent, TasksFilterComponent, TasksGridComponent],
+    declarations: [TaskComponent, CreateTaskComponent, TasksFilterComponent, TasksGridComponent, TaskEditComponent],
   exports: [TaskComponent]
 })
 export class TaskModule {

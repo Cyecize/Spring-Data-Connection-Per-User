@@ -24,6 +24,9 @@ export class TasksGridComponent implements OnInit {
   @Output()
   onTaskStatusChange = new EventEmitter<{ task: TaskModel; inProgress: boolean }>();
 
+  @Output()
+  onTaskEdit = new EventEmitter<TaskModel>();
+
   ngOnInit(): void {
   }
 
@@ -46,5 +49,9 @@ export class TasksGridComponent implements OnInit {
     })
 
     event.preventDefault();
+  }
+
+  taskEdit(task: TaskModel) {
+    this.onTaskEdit.next(task);
   }
 }

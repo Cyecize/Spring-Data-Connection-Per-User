@@ -25,6 +25,7 @@ export class TaskComponent implements OnInit {
 
   showDeleteConfirmModal!: boolean;
   showChangeTaskStatusModal!: boolean;
+  showEditTaskModal!: boolean;
 
   selectedTask!: TaskModel;
   selectedTaskInProgress!: boolean;
@@ -95,5 +96,17 @@ export class TaskComponent implements OnInit {
     this.selectedTask = $event.task;
     this.selectedTaskInProgress = $event.inProgress;
     this.showChangeTaskStatusModal = true;
+  }
+
+  editTask(task: TaskModel) {
+    this.selectedTask = task;
+    this.showEditTaskModal = true;
+  }
+
+  async confirmTaskEdit(task: TaskCreate) {
+    this.errors = [];
+    this.errors = await this.taskService.editTask(task, this.selectedTask.id);
+    this.showEditTaskModal = false;
+    this.onFilterChange(this.taskQuery);
   }
 }
